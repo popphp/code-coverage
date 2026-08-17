@@ -1,52 +1,12 @@
 <?php
-$urls = [
-    'pop-acl'           => '/pop-acl/index.html',
-    'pop-archive'       => '/pop-archive/index.html',
-    'pop-audit'         => '/pop-audit/index.html',
-    'pop-auth'          => '/pop-auth/index.html',
-    'pop-cache'         => '/pop-cache/index.html',
-    'pop-code'          => '/pop-code/index.html',
-    'pop-color'         => '/pop-color/index.html',
-    'pop-config'        => '/pop-config/index.html',
-    'pop-console'       => '/pop-console/index.html',
-    'pop-cookie'        => '/pop-cookie/index.html',
-    'pop-crypt'         => '/pop-crypt/index.html',
-    'pop-css'           => '/pop-css/index.html',
-    'pop-csv'           => '/pop-csv/index.html',
-    'pop-crypt'         => '/pop-crypt/index.html',
-    'pop-data'          => '/pop-data/index.html',
-    'pop-debug'         => '/pop-debug/index.html',
-    'pop-db'            => '/pop-db/index.html',
-    'pop-dir'           => '/pop-dir/index.html',
-    'pop-dom'           => '/pop-dom/index.html',
-    'pop-feed'          => '/pop-feed/index.html',
-    'pop-file'          => '/pop-file/index.html',
-    'pop-filter'        => '/pop-filter/index.html',
-    'pop-form'          => '/pop-form/index.html',
-    'pop-geo'           => '/pop-geo/index.html',
-    'pop-http'          => '/pop-http/index.html',
-    'pop-i18n'          => '/pop-i18n/index.html',
-    'pop-image'         => '/pop-image/index.html',
-    'pop-kettle'        => '/pop-kettle/index.html',
-    'pop-log'           => '/pop-log/index.html',
-    'pop-mail'          => '/pop-mail/index.html',
-    'pop-mime'          => '/pop-mime/index.html',
-    'pop-nav'           => '/pop-nav/index.html',
-    'pop-paginator'     => '/pop-paginator/index.html',
-    'pop-parser'        => '/pop-parser/index.html',
-    'pop-payment'       => '/pop-payment/index.html',
-    'pop-pdf'           => '/pop-pdf/index.html',
-    'pop-queue'         => '/pop-queue/index.html',
-    'pop-session'       => '/pop-session/index.html',
-    'pop-shipping'      => '/pop-shipping/index.html',
-    'pop-storage'       => '/pop-storage/index.html',
-    'popphp'            => '/popphp/index.html',
-    'pop-shipping'      => '/pop-shipping/index.html',
-    'pop-utils'         => '/pop-utils/index.html',
-    'pop-validator'     => '/pop-validator/index.html',
-    'pop-version'       => '/pop-version/index.html',
-    'pop-view'          => '/pop-view/index.html'
-];
+require __DIR__ . '/lib/scan.php';
+
+$components = coverage_scan(__DIR__);
+$urls       = [];
+
+foreach ($components as $component) {
+    $urls[$component['name']] = '/' . $component['path'];
+}
 
 $colors = [
     50 => '#e05d44', // red
