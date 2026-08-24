@@ -21,7 +21,8 @@ $metricLabels = ['lines' => 'Lines', 'methods' => 'Methods', 'classes' => 'Class
     <meta name="description" content="Code coverage reports for the Pop PHP Framework components" />
     <meta name="robots" content="all" />
 
-    <link rel="icon" type="image/png" href="assets/img/pop-php-icon.png" />
+    <link type="image/png" rel="shortcut icon" href="https://media.popphp.org/img/pop-php-icon.png" />
+    <link rel="icon" type="image/png" href="https://media.popphp.org/img/pop-php-icon.png" />
     <link rel="stylesheet" href="css/styles.css" />
 
     <script>
