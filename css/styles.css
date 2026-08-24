@@ -693,6 +693,32 @@ h1, h2 {
     text-align: center;
 }
 
+/* Shown in place of the toolbar and grid when no reports are present */
+
+.empty-state {
+    max-width: 520px;
+    margin: 20px auto 0 auto;
+    padding: 40px 28px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+    text-align: center;
+}
+
+.empty-state > h2 {
+    margin-bottom: 10px;
+    font-family: var(--display);
+    font-size: 1.0625rem;
+    font-weight: 600;
+}
+
+.empty-state > p {
+    color: var(--muted);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+}
+
 /* Footer */
 
 .foot {

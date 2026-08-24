@@ -2,7 +2,8 @@
 require __DIR__ . '/lib/scan.php';
 
 $components = coverage_scan(__DIR__);
-$latest     = max(array_column($components, 'generated'));
+$stamps     = array_filter(array_column($components, 'generated'));
+$latest     = $stamps ? max($stamps) : null;
 $first      = $components[0] ?? null;
 
 $metricLabels = ['lines' => 'Lines', 'methods' => 'Methods', 'classes' => 'Classes'];
@@ -71,6 +72,7 @@ $metricLabels = ['lines' => 'Lines', 'methods' => 'Methods', 'classes' => 'Class
 
         <div class="sidebar-body" id="sidebar-body">
 
+            <?php if ($components): ?>
             <div class="filter">
                 <svg class="filter-icon" viewBox="0 0 16 16" aria-hidden="true">
                     <path d="M11.7 10.3a6 6 0 1 0-1.4 1.4l3.3 3.3 1.4-1.4-3.3-3.3ZM7 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z" />
@@ -96,6 +98,7 @@ $metricLabels = ['lines' => 'Lines', 'methods' => 'Methods', 'classes' => 'Class
                 </ul>
                 <p class="side-nav-empty" hidden>No matching components</p>
             </nav>
+            <?php endif; ?>
 
             <?php if ($first !== null): ?>
             <div class="sidebar-foot">
@@ -117,13 +120,17 @@ $metricLabels = ['lines' => 'Lines', 'methods' => 'Methods', 'classes' => 'Class
                 Test coverage reports for every component of the<br />
                 <a href="https://www.popphp.org/" target="_blank" rel="noopener">Pop PHP Framework</a>.
             </p>
+            <?php if ($components): ?>
             <p class="hero-meta">
                 <span><strong><?= count($components) ?></strong> components</span>
                 <?php if ($latest): ?>
                 <span>Last generated <strong><?= date('M j, Y', $latest) ?></strong></span>
                 <?php endif; ?>
             </p>
+            <?php endif; ?>
         </header>
+
+        <?php if ($components): ?>
 
         <div class="toolbar">
             <p class="count" id="count" aria-live="polite"><?= count($components) ?> components</p>
@@ -179,6 +186,15 @@ $metricLabels = ['lines' => 'Lines', 'methods' => 'Methods', 'classes' => 'Class
         </div>
 
         <p class="grid-empty" id="empty" hidden>No components match that filter.</p>
+
+        <?php else: ?>
+
+        <section class="empty-state">
+            <h2>No reports available</h2>
+            <p>Coverage reports have not been published yet. Please check back soon.</p>
+        </section>
+
+        <?php endif; ?>
 
         <footer class="foot">
             <p>

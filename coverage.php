@@ -16,18 +16,20 @@ $colors = [
     90 => '#4dc81f'  // green
 ];
 
-if (!isset($_GET['comp'])):
-    header('HTTP/1.1 404 Not Found');
-    echo '<html><head><title>Component Not Found</title></head><body><h1>Component Not Found</h1></body></html>';
-    exit();
-elseif (isset($_GET['comp']) && !isset($urls[$_GET['comp']])):
+// A component with no $urls entry, no report on disk, or a report that carries
+// no coverage figure is all the same to a browser asking for a badge: not found
+$comp     = $_GET['comp'] ?? null;
+$report   = (($comp !== null) && isset($urls[$comp])) ? __DIR__ . $urls[$comp] : null;
+$contents = (($report !== null) && is_readable($report)) ? file_get_contents($report) : false;
+$start    = ($contents !== false) ? strpos($contents, 'aria-valuenow="') : false;
+
+if ($start === false):
     header('HTTP/1.1 404 Not Found');
     echo '<html><head><title>Component Not Found</title></head><body><h1>Component Not Found</h1></body></html>';
     exit();
 else:
-    $contents = file_get_contents(__DIR__ . $urls[$_GET['comp']]);
-    $coverage = substr($contents, (strpos($contents, 'aria-valuenow="') + 15));
-    $coverage = round(substr($coverage, 0, strpos($coverage, '"')));
+    $coverage = substr($contents, ($start + 15));
+    $coverage = round((float)substr($coverage, 0, strpos($coverage, '"')));
 
     if ($coverage >= 90):
         $color = $colors[90];

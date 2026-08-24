@@ -15,8 +15,11 @@
     var toggle    = document.querySelector('.nav-toggle');
     var body      = document.getElementById('sidebar-body');
 
-    var cards = Array.prototype.slice.call(grid.querySelectorAll('.card'));
-    var links = Array.prototype.slice.call(sideNav.querySelectorAll('a'));
+    // With no reports at all the index renders no grid, filter or nav to wire up
+    var hasComponents = !!(filter && grid && sideNav);
+
+    var cards = hasComponents ? Array.prototype.slice.call(grid.querySelectorAll('.card')) : [];
+    var links = hasComponents ? Array.prototype.slice.call(sideNav.querySelectorAll('a')) : [];
 
     /**
      * Show only the components whose name contains the search term.
@@ -70,58 +73,60 @@
         });
     }
 
-    filter.addEventListener('input', applyFilter);
+    if (hasComponents) {
+        filter.addEventListener('input', applyFilter);
 
-    filter.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') {
-            filter.value = '';
-            applyFilter();
-        }
-    });
-
-    // "/" anywhere on the page jumps to the filter box
-    document.addEventListener('keydown', function (e) {
-        if (e.key === '/' && document.activeElement !== filter) {
-            e.preventDefault();
-            if (body && toggle && getComputedStyle(toggle).display !== 'none') {
-                openNav();
+        filter.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                filter.value = '';
+                applyFilter();
             }
-            filter.focus();
-        }
-    });
-
-    // Clicking the active chip reverses it; clicking the other one starts ascending
-    var sortButtons = Array.prototype.slice.call(document.querySelectorAll('.sort-btn'));
-    var sortKey     = 'name';
-
-    sortButtons.forEach(function (button) {
-        button.addEventListener('click', function () {
-            var key = button.dataset.sort;
-            var dir = 'asc';
-
-            if (key === sortKey) {
-                dir = (button.dataset.dir === 'asc') ? 'desc' : 'asc';
-            }
-
-            sortKey = key;
-
-            sortButtons.forEach(function (other) {
-                other.classList.toggle('is-active', other === button);
-                if (other !== button) {
-                    other.dataset.dir = 'asc';
-                    other.setAttribute('aria-label', 'Sort by ' + other.dataset.sort);
-                }
-            });
-
-            button.dataset.dir = dir;
-            button.setAttribute(
-                'aria-label',
-                'Sort by ' + key + ', currently ' + (dir === 'asc' ? 'ascending' : 'descending')
-            );
-
-            applySort(key, dir);
         });
-    });
+
+        // "/" anywhere on the page jumps to the filter box
+        document.addEventListener('keydown', function (e) {
+            if (e.key === '/' && document.activeElement !== filter) {
+                e.preventDefault();
+                if (body && toggle && getComputedStyle(toggle).display !== 'none') {
+                    openNav();
+                }
+                filter.focus();
+            }
+        });
+
+        // Clicking the active chip reverses it; clicking the other one starts ascending
+        var sortButtons = Array.prototype.slice.call(document.querySelectorAll('.sort-btn'));
+        var sortKey     = 'name';
+
+        sortButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                var key = button.dataset.sort;
+                var dir = 'asc';
+
+                if (key === sortKey) {
+                    dir = (button.dataset.dir === 'asc') ? 'desc' : 'asc';
+                }
+
+                sortKey = key;
+
+                sortButtons.forEach(function (other) {
+                    other.classList.toggle('is-active', other === button);
+                    if (other !== button) {
+                        other.dataset.dir = 'asc';
+                        other.setAttribute('aria-label', 'Sort by ' + other.dataset.sort);
+                    }
+                });
+
+                button.dataset.dir = dir;
+                button.setAttribute(
+                    'aria-label',
+                    'Sort by ' + key + ', currently ' + (dir === 'asc' ? 'ascending' : 'descending')
+                );
+
+                applySort(key, dir);
+            });
+        });
+    }
 
     function openNav() {
         body.classList.add('is-open');
